@@ -86,20 +86,20 @@
                   <label for="inlinecheckbox{{i}}" class="form-check-label">{{ programs[i]}}</label>
                 </div> -->
 
-                <!-- <div *ngFor="let skill of skillsSpecialist.controls let i=index">
+                <div *ngFor="let skill of skillsSpecialist.controls let i=index">
                   <input type="checkbox" [formControl]="skill"/> {{user.skills[i].name}}
-                 </div> -->
+                 </div>
 
                 <!-- <div *ngFor="let control of programsArray.controls; let i=index">
                   <input type="checkbox" [formControl]="control"/> {{user.programs[i].name}}
                  </div> -->
 
-                <div *ngFor="let program of programs; let i=index">
+                <!-- <div *ngFor="let program of programs; let i=index">
                   <label>
                     <input type="checkbox" value="{{program}}" (change)="onCheckboxChange($event)" />
                     {{program}}
                   </label>
-                </div>
+                </div> -->
               </div>
                 <div class="mb-3">
                   <label class="form-label">Gender:&nbsp;&nbsp;</label>

@@ -27,18 +27,18 @@ export class EmployeeDashboardComponent implements OnInit {
   //     { name: 'Javascript',  id: 4 },
   //   ]
   // }
-  // user = {
-  //   skills: [
-  //     { name: 'JS',  selected: true, id: 1 },
-  //     { name: 'CSS',  selected: false, id: 2 },
-  //   ]
-  // }
-  programs: Array<string>= [
-    "Ruby",
-    "Java",
-    "Python",
-    "JavaScript"
-  ]
+  user = {
+    skills: [
+      { name: 'JS',  selected: true, id: 1 },
+      { name: 'CSS',  selected: false, id: 2 },
+    ]
+  }
+  // programs: Array<string>= [
+  //   "Ruby",
+  //   "Java",
+  //   "Python",
+  //   "JavaScript"
+  // ]
   selectedProgramValues = []
   favProgramError:Boolean = true
   employeeModelObj : EmployeeModel =  new EmployeeModel();
@@ -57,42 +57,42 @@ export class EmployeeDashboardComponent implements OnInit {
       email : [null, Validators.compose([Validators.required, Validators.email])],
       mobile : [null, [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       salary : [null, Validators.required],
-      specialist: this.formbuilder.array([]),
-      // skills: this.buildSkills(),
+      //specialist: this.formbuilder.array([]),
+      skills: this.buildSkills(),
       gender: [null, Validators.required]
     })
     this.getAllEmployees();
   }
 
-  // get skillsSpecialist() {
-  //   console.log(`skills => ${this.formValue.get('skills')}`)
-  //   return this.formValue.get('skills') as FormArray
-  // };
+  get skillsSpecialist() {
+    console.log(`skills => ${this.formValue.get('skills')}`)
+    return this.formValue.get('skills') as FormArray
+  };
 
-  // buildSkills() {
-  //   const arr = this.user.skills.map(skill => {
-  //     return this.formbuilder.control(skill.selected);
-  //   });
-  //   return this.formbuilder.array(arr);
-  // }
-
-  onCheckboxChange(e: any) {
-    const value: FormArray = <FormArray>this.formValue.get('specialist');
-    if (e.target.checked) {
-      value.push(new FormControl(e.target.value));
-    }else {
-      let i: number = 0;
-      value.controls.forEach((item) => {
-        if (item.value == e.target.value) {
-          value.removeAt(i);
-          return;
-        }
-        i++;
-
-      });
-    }
-    console.log(this.formValue.value.specialist)
+  buildSkills() {
+    const arr = this.user.skills.map(skill => {
+      return this.formbuilder.control(skill.selected);
+    });
+    return this.formbuilder.array(arr);
   }
+
+  // onCheckboxChange(e: any) {
+  //   const value: FormArray = <FormArray>this.formValue.get('specialist');
+  //   if (e.target.checked) {
+  //     value.push(new FormControl(e.target.value));
+  //   }else {
+  //     let i: number = 0;
+  //     value.controls.forEach((item) => {
+  //       if (item.value == e.target.value) {
+  //         value.removeAt(i);
+  //         return;
+  //       }
+  //       i++;
+
+  //     });
+  //   }
+  //   console.log(this.formValue.value.specialist)
+  // }
 
   // addProgramsControls(){
   //   const arr = this.user["programs"].map((ele)=>{
