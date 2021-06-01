@@ -1,0 +1,51 @@
+{
+  "Employees": [
+    {
+      "id": 1,
+      "firstName": "vignesh",
+      "lastName": "sridhar",
+      "email": "vicky@gmail.com",
+      "mobile": "9087654321",
+      "salary": "Low > below 10,000",
+      "specialist": [],
+      "gender": "female"
+    },
+    {
+      "id": 2,
+      "firstName": "shivan",
+      "lastName": "shivan",
+      "email": "shivan@gmail.com",
+      "mobile": "1234567890",
+      "salary": "Low > below 10,000",
+      "gender": "female"
+    },
+    {
+      "id": 3,
+      "firstName": "govindha",
+      "lastName": "govindha",
+      "email": "govi@gmail.com",
+      "mobile": "1234567890",
+      "salary": "Medium > above 10,000 to below 50,000",
+      "gender": "male"
+    },
+    {
+      "id": 4,
+      "firstName": "jana",
+      "lastName": "jana",
+      "email": "jana@gmail.com",
+      "mobile": "8436982689",
+      "salary": "Medium > above 10,000 to below 50,000",
+      "gender": "male"
+    },
+    {
+      "id": 5,
+      "firstName": "jacky",
+      "lastName": "jacky",
+      "email": "jacky@gmail.com",
+      "mobile": "1234567890",
+      "salary": "High > above 50,000",
+      "specialist": [],
+      "gender": "male"
+    }
+  ]
+}

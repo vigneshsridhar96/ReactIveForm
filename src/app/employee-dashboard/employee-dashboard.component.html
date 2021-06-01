@@ -1,0 +1,111 @@
+<nav class="navbar navbar-light bg-primary">
+    <div class="container-fluid">
+        <h1 style="color: aliceblue;">Employees</h1>
+        <div class="d-flex">
+            <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success" (click)="clickAddEmploye()">AddEmployees</button>
+        </div>
+    </div>
+</nav>
+
+<table class="table mt-3">
+    <thead>
+      <tr>
+        <th scope="col">Employee ID</th>
+        <th scope="col">First Name</th>
+        <th scope="col">Last Name</th>
+        <th scope="col">Email ID</th>
+        <th scope="col">Mobile No.</th>
+        <th scope="col">Salary</th>
+        <th scope="col">Specialist</th>
+        <th scope="col">Gender</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor= "let employe of employeesData">
+        <td>{{ employe.id }}</td>
+        <td>{{ employe.firstName }}</td>
+        <td>{{ employe.lastName }}</td>
+        <td>{{ employe.email}}</td>
+        <td>{{ employe.mobile }}</td>
+        <td>{{ employe.salary }}</td>
+        <td>{{ employe.specialist }}</td>
+        <td>{{ employe.gender }}</td>
+        <td>
+            <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-primary" (click)="onEdit(employe)">Edit</button>
+            <button class="btn btn-danger mx-3" (click)="deleteEmployeDetail(employe)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Employee Details</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="formValue">
+            <div class="mb-3">
+                <label class="form-label">FirstName</label>
+                <input type="text" formControlName="firstName" class="form-control"/>
+                <span *ngIf="!formValue.controls['firstName'].valid && formValue.controls['firstName'].touched"> This field is required </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">LastName</label>
+                <input type="text" class="form-control" formControlName="lastName" />
+                <span *ngIf="!formValue.controls['lastName'].valid && formValue.controls['lastName'].touched"> This field is required </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email ID</label>
+                <input type="email" class="form-control" formControlName="email" />
+                <span *ngIf="!formValue.controls['email'].valid && formValue.controls['email'].touched"> This field is required </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Mobile No.</label>
+                <input type="text" class="form-control" formControlName="mobile" />
+                <span *ngIf="!formValue.controls['mobile'].valid && formValue.controls['mobile'].touched"> This field is required </span>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Salary</label>
+                <select class="form-select" aria-label="Select Salary" formControlName="salary">
+                  <option selected [ngValue]=null>Select Salary</option>
+                  <option  *ngFor="let salary of salariesDetails" value="{{ salary }}">{{ salary }}</option>
+                </select>
+                <span *ngIf="!formValue.controls['salary'].valid && formValue.controls['salary'].touched"> This field is required </span>
+              </div>
+              <div class="mb-3">
+                <div>
+                  <label for="" class="form-label">Programs</label>
+                </div>
+                <div class="form-check form-check-inline" *ngFor="let control of programsArray.controls; let i = index">
+                  {{  control.value }}
+                  <!-- <input type="checkbox" [formControl]="control" class="form-check-input" id="inlinecheckbox{{i}}" value="" >
+                  <label for="inlinecheckbox{{i}}" class="form-check-label">{{ programs[i]}}</label> -->
+                </div>
+              </div>
+                <div class="mb-3">
+                  <label class="form-label">Gender:&nbsp;&nbsp;</label>
+                    <input class="form-check-input" type="radio" formControlName="gender"  value="male">&nbsp;
+                    <label class="form-check-label" >
+                      Male
+                    </label>&nbsp;
+                    <input class="form-check-input" type="radio" formControlName="gender" value="female" >&nbsp;&nbsp;
+                    <label class="form-check-label">
+                      Female
+                    </label>
+                    <span *ngIf="!formValue.controls['gender'].valid && formValue.controls['gender'].touched"> This field is required </span>
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="closeModelBox" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button *ngIf="showAdd" type="button" class="btn btn-primary" (click)="postEmployeeDetails()" [disabled]="formValue.invalid">Add</button>
+          <button *ngIf="showUpdate" type="button" class="btn btn-primary" (click)="updateEmployeeDetails()" [disabled]="formValue.invalid">Update</button>
+        </div>
+      </div>
+    </div>
+  </div>
