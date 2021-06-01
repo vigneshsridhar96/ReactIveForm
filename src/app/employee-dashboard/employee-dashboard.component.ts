@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms'
+import { FormControl, FormArray, FormBuilder, FormGroup, Validators,  } from '@angular/forms'
 import { ApiService } from '../shared/api.service';
 import { EmployeeModel} from './employee-db.model'
 
@@ -19,12 +19,28 @@ export class EmployeeDashboardComponent implements OnInit {
     "Medium > above 10,000 to below 50,000",
     "High > above 50,000",
   ]
+  // user = {
+  //   programs: [
+  //     { name: 'Java',   id: 1 },
+  //     { name: 'Python',  id: 2 },
+  //     { name: 'Ruby',  id: 3 },
+  //     { name: 'Javascript',  id: 4 },
+  //   ]
+  // }
+  // user = {
+  //   skills: [
+  //     { name: 'JS',  selected: true, id: 1 },
+  //     { name: 'CSS',  selected: false, id: 2 },
+  //   ]
+  // }
   programs: Array<string>= [
     "Ruby",
     "Java",
     "Python",
     "JavaScript"
   ]
+  selectedProgramValues = []
+  favProgramError:Boolean = true
   employeeModelObj : EmployeeModel =  new EmployeeModel();
 
   constructor(private formbuilder: FormBuilder, private api: ApiService) { }
@@ -34,10 +50,6 @@ export class EmployeeDashboardComponent implements OnInit {
     this.showUpdate = false
   }
 
-  onCheckboxChange(){
-
-  }
-
   ngOnInit(): void {
     this.formValue = this.formbuilder.group({
       firstName : [null, Validators.required],
@@ -45,23 +57,63 @@ export class EmployeeDashboardComponent implements OnInit {
       email : [null, Validators.compose([Validators.required, Validators.email])],
       mobile : [null, [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       salary : [null, Validators.required],
-      specialist: this.addProgramsControls(),
+      specialist: this.formbuilder.array([]),
+      // skills: this.buildSkills(),
       gender: [null, Validators.required]
     })
     this.getAllEmployees();
   }
 
-  addProgramsControls(){
-    const arr = this.programs.map((ele)=>{
-      return this.formbuilder.control(false);
-    })
-    return this.formbuilder.array(arr);
+  // get skillsSpecialist() {
+  //   console.log(`skills => ${this.formValue.get('skills')}`)
+  //   return this.formValue.get('skills') as FormArray
+  // };
+
+  // buildSkills() {
+  //   const arr = this.user.skills.map(skill => {
+  //     return this.formbuilder.control(skill.selected);
+  //   });
+  //   return this.formbuilder.array(arr);
+  // }
+
+  onCheckboxChange(e: any) {
+    const value: FormArray = <FormArray>this.formValue.get('specialist');
+    if (e.target.checked) {
+      value.push(new FormControl(e.target.value));
+    }else {
+      let i: number = 0;
+      value.controls.forEach((item) => {
+        if (item.value == e.target.value) {
+          value.removeAt(i);
+          return;
+        }
+        i++;
+
+      });
+    }
+    console.log(this.formValue.value.specialist)
   }
 
-  get programsArray(){
-    console.log("programArray => ", this.formValue.get("specialist"))
-    return <FormArray>this.formValue.get("specialist")
-  }
+  // addProgramsControls(){
+  //   const arr = this.user["programs"].map((ele)=>{
+  //     return this.formbuilder.control(false);
+  //   })
+  //   return this.formbuilder.array(arr);
+  // }
+
+  // get programsArray(){
+  //   return <FormArray>this.formValue.get("specialist")
+  // }
+
+  // getSelectedFruitsValue() {
+  //   this.selectedProgramValues = [];
+  //   // this.formValue.controls.forEach((control, i) => {
+  //   //   if (control.value) {
+  //   //     this.selectedProgramValues.push();
+  //   //   }
+  //   // });
+  //   this.favProgramError =  this.selectedProgramValues.length > 0 ? false : true;
+  // }
 
   postEmployeeDetails(){
     this.employeeModelObj.firstName = this.formValue.value.firstName
@@ -69,7 +121,7 @@ export class EmployeeDashboardComponent implements OnInit {
     this.employeeModelObj.email = this.formValue.value.email
     this.employeeModelObj.mobile = this.formValue.value.mobile
     this.employeeModelObj.salary = this.formValue.value.salary
-    this.employeeModelObj.specialist = ["java", "python", "Javascript"]
+    this.employeeModelObj.specialist = this.formValue.value.specialist
     this.employeeModelObj.gender = this.formValue.value.gender
 
     this.api.postEmploye(this.employeeModelObj).subscribe(
@@ -77,6 +129,7 @@ export class EmployeeDashboardComponent implements OnInit {
         let ref = document.getElementById("closeModelBox")
         ref?.click();
         this.formValue.reset();
+        console.log(this.formValue.value.specialist);
         this.getAllEmployees();
       },
       err => {
@@ -89,9 +142,9 @@ export class EmployeeDashboardComponent implements OnInit {
     this.api.getEmploye().subscribe(
       res => {
         this.employeesData = res
-        console.log("Employee data => ", this.employeesData);
       }
     )
+    console.log("formVAlue",this.formValue.value.specialist)
   }
 
   deleteEmployeDetail(employe:any){
@@ -113,6 +166,11 @@ export class EmployeeDashboardComponent implements OnInit {
     this.formValue.controls['mobile'].setValue(employe.mobile);
     this.formValue.controls['salary'].setValue(employe.salary);
     this.formValue.controls['gender'].setValue(employe.gender);
+    employe.specialist.forEach( (ele: any)  =>
+    this.formValue.controls['specialist'].setValue(ele)
+    );
+    console.log("specialist=>",employe.gender)
+
   }
 
   updateEmployeeDetails(){
@@ -132,4 +190,6 @@ export class EmployeeDashboardComponent implements OnInit {
       err => { alert("something went wrong")}
     )
   }
+
+
 }
